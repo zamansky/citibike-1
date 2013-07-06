@@ -1,0 +1,16 @@
+<head>
+<script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="/static/js/underscore.js"></script>
+<script type="text/javascript" src="/static/js/backbone.js"></script>
+<script type="text/javascript" src="/static/main.js"></script>
+</head>
+<body>
+<script type="text/teplate" id="time_template">
+<div> <%= date %> </div>
+<input type="range" id="daterange" step="3000" min="<%= min %>" max="<%= max %>"value= <% print(date.getTime()) %> ></input>
+</script>
+
+
+<h1>Hello</h1>
+<div id="interface">replace</div>
+</body>
