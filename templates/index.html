@@ -10,7 +10,14 @@
 <input type="range" id="daterange" step="3000" min="<%= min %>" max="<%= max %>"value= <% print(date.getTime()) %> ></input>
 </script>
 
+<script type="text/teplate" id="stationlist_template">
+<select>
+<% _.each(stations, function(name) { %> <option value="<%=name%>"><%= name %></option> <% }); %>";
+</select>
+</script>
+
 
 <h1>Hello</h1>
 <div id="interface">replace</div>
+<div id="stationlist">Stations</div>
 </body>
