@@ -28,6 +28,7 @@ def getStation():
     station = request.args.get('stationName','W 26 St & 8 Ave')
     secs = request.args.get('timestamp',time.time())
     cursor =collection.find({'stationName':station},{'availableBikes':1,'timestamp':1,'_id':0})
+    cursor.sort("timestamp")
     stats=[x for x in cursor]
     cursor =collection.find({'stationName':station},{'_id':0})
     info=cursor[0]
