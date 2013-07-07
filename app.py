@@ -3,7 +3,7 @@ from flask import Flask, request, render_template, url_for, redirect
 import sys
 import popen2
 import pymongo
-import json
+import json,time
 
 app = Flask(__name__)
 app.secret_key="testkey"
@@ -22,6 +22,18 @@ def getDateRange():
     newest=cursor[0]['timestamp']
     range={'min':oldest,'max':newest}
     return json.dumps(range)
+
+@app.route("/getStation")
+def getStation():
+    station = request.args.get('stationName','W 26 St & 8 Ave')
+    secs = request.args.get('timestamp',time.time())
+    cursor =collection.find({'stationName':station},{'availableBikes':1,'timestamp':1,'_id':0})
+    stats=[x for x in cursor]
+    cursor =collection.find({'stationName':station},{'_id':0})
+    info=cursor[0]
+    data={'info':info,'stats':stats}
+    return json.dumps(data)
+
 
 @app.route("/getstationdiff/<station>/<time>")
 def getstationdiff(station=None,time=None):
