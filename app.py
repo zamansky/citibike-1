@@ -32,6 +32,8 @@ def getStation():
     stats=[x for x in cursor]
     cursor =collection.find({'stationName':station},{'_id':0})
     info=cursor[0]
+    info['min']=stats[0]['timestamp']
+    info['max']=stats[-1]['timestamp']
     data={'info':info,'stats':stats}
     return json.dumps(data)
 
@@ -65,3 +67,6 @@ collection = db['stations']
 if __name__=="__main__":
     app.debug=True
     app.run(host="0.0.0.0")
+
+
+    
