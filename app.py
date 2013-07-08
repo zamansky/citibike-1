@@ -37,7 +37,7 @@ def getStation(station=None):
     info=cursor[0]
     info['min']=stats[0]['timestamp']
     info['max']=stats[-1]['timestamp']
-    data={'info':info,'stats':stats}
+    data={'stationName':station,'info':info,'stats':stats}
     return json.dumps(data)
 
 

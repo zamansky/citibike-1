@@ -50,11 +50,12 @@ StationsView = Backbone.View.extend({
 	},
     doChangeStation:function(e) {
 	var newStation = e.target.value;
-	m = new StationModel(newStation);
-	console.log(m);
-	},
+	var m = new StationModel(newStation);
+	var mv = new StationGraphView({model:m});
+	m.set('view',mv);
+    },
+
     render: function() {
-	console.log(this);
 	var subs={stations:this.model.get('stations')};
 	var t = _.template($("#stationlist_template").html(),subs);
 	this.$el.html(t);
@@ -74,7 +75,76 @@ StationsModel = Backbone.Model.extend({
 })
 
 
+makeGraph = function(stats) {
+console.log(stats);
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 1000 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%d-%b-%y").parse;
+
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").tickFormat(d3.time.format("%H:%M"));//ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.bikes); });
+
+var svg = d3.select('#graph')
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // loop over stats and make date and bikes for each 
+    stats.forEach(function (d) {
+	var nd = new Date(d['timestamp']*1000);
+	//d.date=new Date(d['timestamp'])
+	d.date = d3.time.format.iso.parse(nd);
+	d.bikes=d['availableBikes'];
+   });
+
+   // Scale the range of the data
+    x.domain(d3.extent(stats, function(d) { return d.date; }));
+    y.domain([0, d3.max(stats, function(d) { return d.bikes; })]);
+
+    svg.append("path")      // Add the valueline path.
+        .attr("d", valueline(stats));
+
+    svg.append("g")         // Add the X Axis
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")         // Add the Y Axis
+        .attr("class", "y axis")
+        .call(yAxis);
+
+return svg;		  
+}
+
+
+
 StationGraphView = Backbone.View.extend({
+    el:"#graph",
+    initialize: function() {
+    },
+    render: function() {
+	//this.$el.html(this.model.get('stationName'));
+	var stats = this.model.get('stats');
+	this.$el.empty();
+	var g = makeGraph(stats);
+	//this.%el.html(g);
+	return this;
+    }
+    
 });
 
 
@@ -83,12 +153,14 @@ StationModel = Backbone.Model.extend({
 	return "/getStation/"+this.get('stationName');
     },
     initialize: function(data) {
-	console.log(data);
 	if (data===undefined) {
 	    data = '';
 	}
+	var that=this;
 	this.set({'stationName':data});
-	this.fetch();
+	this.fetch({success:function(data) {
+	that.get('view').render();
+	}});
     }
 });
 

@@ -4,6 +4,27 @@
 <script type="text/javascript" src="/static/js/backbone.js"></script>
 <script type="text/javascript" src="/static/js/d3.v3.js"></script>
 <script type="text/javascript" src="/static/main.js"></script>
+
+<style>
+
+body { font: 12px Arial;}
+
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+</style>
+
 </head>
 <body>
 <script type="text/teplate" id="time_template">
@@ -21,4 +42,6 @@
 <h1>Hello</h1>
 <div id="interface">replace</div>
 <div id="stationlist">Stations</div>
+<div id="graph"></div>
+
 </body>
