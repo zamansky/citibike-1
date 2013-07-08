@@ -23,9 +23,12 @@ def getDateRange():
     range={'min':oldest,'max':newest}
     return json.dumps(range)
 
-@app.route("/getStation")
-def getStation():
-    station = request.args.get('stationName','W 26 St & 8 Ave')
+@app.route("/getStation/")
+@app.route("/getStation/<station>")
+def getStation(station=None):
+    if station==None:
+        station='W 26 St & 8 Ave'
+    # station = request.args.get('stationName','W 26 St & 8 Ave')
     secs = request.args.get('timestamp',time.time())
     cursor =collection.find({'stationName':station},{'availableBikes':1,'timestamp':1,'_id':0})
     cursor.sort("timestamp")
@@ -67,6 +70,3 @@ collection = db['stations']
 if __name__=="__main__":
     app.debug=True
     app.run(host="0.0.0.0")
-
-
-    

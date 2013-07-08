@@ -73,9 +73,22 @@ StationsModel = Backbone.Model.extend({
 
 })
 
+
+StationGraphView = Backbone.View.extend({
+});
+
+
 StationModel = Backbone.Model.extend({
-    initialize:function(data) {
+    url:function () {
+	return "/getStation/"+this.get('stationName');
+    },
+    initialize: function(data) {
 	console.log(data);
+	if (data===undefined) {
+	    data = '';
+	}
+	this.set({'stationName':data});
+	this.fetch();
     }
 });
 
