@@ -1,3 +1,5 @@
+// map center, zoom1 14 var center = new google.maps.LatLng(40.704066,-73.992727);
+
 
 DateModel = Backbone.Model.extend({
     defaults: { date: new Date()},
