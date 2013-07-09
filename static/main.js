@@ -32,6 +32,7 @@ StationsView = Backbone.View.extend({
 		var m = new StationModel(newStation);
 		var mv = new StationGraphView({model:m});
 		m.set('view',mv);
+		var sv = new StationStatModelView({model:m});
 	    });
 
 	});
@@ -133,6 +134,8 @@ StationGraphView = Backbone.View.extend({
 StationStatModelView = Backbone.View.extend({
     el:"#stationstats",
     initialize: function(d) {
+	_.bindAll(this,"render");
+	this.model.bind('change',this.render);
     },
     render:function() {
 	var m = this.model;
