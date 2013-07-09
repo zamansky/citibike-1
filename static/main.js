@@ -1,66 +1,46 @@
-// map center, zoom1 14 var center = new google.maps.LatLng(40.704066,-73.992727);
-
-
-DateModel = Backbone.Model.extend({
-    defaults: { date: new Date()},
-    initialize: function() {
-	var that=this;
-	$.getJSON("/getDateRange",function(data) {
-	    that.set('min',data.min);
-	    that.set('max',data.max);
-	    that.get('view').render();
-	});
-    }
-    
-});
-
-
-DateView = Backbone.View.extend({
-    el:'#interface',
-    initialize: function() {
-	//_.bindAll(this,"render");
-	//this.model.bind('change',this.render);
-	//this.render();
-    },
-    events: {
-	"change input[type=range]": "doChangeDate",
-	"mouseup input[type=range]": "render"
-    },
-    doChangeDate : function(e) {
-	
-	var tmp = new Date();
-	var d = new Date(parseInt(e.target.value));
-	this.model.set({'date':d});
-	//this.render(); // this seems to be better as a mouseup
-    },
-    render: function() {
-	var date=this.model.get('date')
-	var max=this.model.get('max');
-	var min=this.model.get('min')
-	var subs={date:date,min:min,max:max};
-	var t = _.template($("#time_template").html(),subs)
-	this.$el.html(t);
-	return this;
-    }
-});
-
 
 StationsView = Backbone.View.extend({
-    el:'#stationlist',
-    events: {
-	"change select": "doChangeStation"
-	},
+    el:'#stationmap',
     doChangeStation:function(e) {
-	var newStation = e.target.value;
+	//var newStation = e.target.value;
+	var newStation = e;
 	var m = new StationModel(newStation);
 	var mv = new StationGraphView({model:m});
 	m.set('view',mv);
     },
 
     render: function() {
-	var subs={stations:this.model.get('stations')};
-	var t = _.template($("#stationlist_template").html(),subs);
-	this.$el.html(t);
+	var myLatlng = new google.maps.LatLng(40.704066,-73.992727);
+	var mapOptions = {
+	    zoom: 14,
+	    center: myLatlng,
+	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+
+	this.map = new google.maps.Map(document.getElementById('stationmap'), mapOptions);
+	var that=this;
+	this.model.get('stations').forEach(function (d) {
+	    var ll = new google.maps.LatLng(parseFloat(d['latitude']),
+					    parseFloat(d['longitude']));
+	    var marker = new google.maps.Marker({
+		position: ll,
+		map:that.map,
+		title: d['stationName']
+	    });
+	    google.maps.event.addListener(marker, 'click', function(e) {
+		var newStation = d['stationName'];
+		var m = new StationModel(newStation);
+		var mv = new StationGraphView({model:m});
+		m.set('view',mv);
+	    });
+
+	});
+
+	//console.log(map);
+	//var subs={stations:this.model.get('stations')};
+	//var t = _.template($("#stationlist_template").html(),subs);
+	//
+	//$("#stationamp").replaceWith(this.el);
 	return this;
     }
 });
@@ -78,7 +58,6 @@ StationsModel = Backbone.Model.extend({
 
 
 makeGraph = function(stats) {
-console.log(stats);
 var margin = {top: 30, right: 20, bottom: 30, left: 50},
     width = 1000 - margin.left - margin.right,
     height = 270 - margin.top - margin.bottom;
@@ -89,7 +68,7 @@ var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").tickFormat(d3.time.format("%H:%M"));//ticks(5);
+    .orient("bottom").tickFormat(d3.time.format("%a %H:%M")).ticks(d3.time.hours,2);
 
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
@@ -107,7 +86,7 @@ var svg = d3.select('#graph')
 
     // loop over stats and make date and bikes for each 
     stats.forEach(function (d) {
-	var nd = new Date(d['timestamp']*1000);
+	var nd = new Date(d['timestamp']*1000+1000*60*3*60);
 	//d.date=new Date(d['timestamp'])
 	d.date = d3.time.format.iso.parse(nd);
 	d.bikes=d['availableBikes'];
@@ -136,17 +115,33 @@ return svg;
 
 StationGraphView = Backbone.View.extend({
     el:"#graph",
-    initialize: function() {
-    },
     render: function() {
 	//this.$el.html(this.model.get('stationName'));
 	var stats = this.model.get('stats');
 	this.$el.empty();
 	var g = makeGraph(stats);
-	//this.%el.html(g);
+	d3.select('#graph').append(g);
+	//this.$el.html(d3.select('svg'));
+	
 	return this;
     }
     
+});
+
+
+
+StationStatModelView = Backbone.View.extend({
+    el:"#stationstats",
+    initialize: function(d) {
+    },
+    render:function() {
+	var m = this.model;
+	var s=m.get('info');
+	console.log(s);
+	var t = _.template($("#stationstat_template").html(),s);
+	this.$el.html(t);
+	return this;
+    }
 });
 
 
@@ -161,21 +156,16 @@ StationModel = Backbone.Model.extend({
 	var that=this;
 	this.set({'stationName':data});
 	this.fetch({success:function(data) {
-	that.get('view').render();
+	    that.get('view').render();
 	}});
     }
 });
 
 
-
 var d,v;
 var stations,sv;
 $(document).ready(function(){
-    d = new DateModel();
-    v = new DateView({model:d});
-    d.set('view',v);
     stations=new StationsModel();
     sv = new StationsView({model:stations});
     stations.set('view',sv);
 });
-

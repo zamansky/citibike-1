@@ -1,14 +1,15 @@
 <head>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.0/pure-min.css">
+
 <script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
 <script type="text/javascript" src="/static/js/underscore.js"></script>
 <script type="text/javascript" src="/static/js/backbone.js"></script>
 <script type="text/javascript" src="/static/js/d3.v3.js"></script>
-<script type="text/javascript" src="/static/main.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script><script type="text/javascript" src="/static/main.js"></script>
 
-<style>
-
-body { font: 12px Arial;}
-
+<style type="text/css">
+   html { height: 100% }
+   #stationmap { height: 400px }
 path { 
     stroke: steelblue;
     stroke-width: 2;
@@ -21,15 +22,16 @@ path {
     stroke: grey;
     stroke-width: 1;
     shape-rendering: crispEdges;
+
+
 }
 
 </style>
 
 </head>
 <body>
-<script type="text/teplate" id="time_template">
-<div> <%= date %> </div>
-<input type="range" id="daterange" step="3000" min="<%= min %>" max="<%= max %>"value= <% print(date.getTime()) %> ></input>
+<script type="text/template" id="stationstat_template">
+<div> <%= stationName %> </div>
 </script>
 
 <script type="text/teplate" id="stationlist_template">
@@ -39,9 +41,19 @@ path {
 </script>
 
 
-<h1>Hello</h1>
-<div id="interface">replace</div>
-<div id="stationlist">Stations</div>
-<div id="graph"></div>
+<h1>CitiBikes</h1>
+<div class="purge-g">
+  <div class="pure-u-2-3">
+    <div id="stationmap" >Stationmap goes here</div>
+  </div>
+  <div class="pure-u-1-6">
+    <div id="stationstats">Station Stats go here </div>
+  </div>
+</div>
 
+<div class="purge-g">
+  <div class="pure-u-2-3">
+    <div id="graph">graph goes here</div>
+  </div>
+</div>
 </body>

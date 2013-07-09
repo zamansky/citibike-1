@@ -54,12 +54,13 @@ def getstationdiff(station=None,time=None):
 
 @app.route("/getStations")
 def getStations():
-    stations =  db.command({'distinct':'stations','key':'stationName'})[
-        'values']
-    cursor = collection.find({'stationName':'W 26 St & 8 Ave'})
-    cursor.sort("timestamp")
-    newest=cursor[0]['timestamp']
-    return json.dumps({'stations':stations,'newest':newest})
+    #stations =  db.command({'distinct':'stations','key':'stationName'})[n
+    #    'values']
+    #cursor = collection.find({'stationName':'W 26 St & 8 Ave'})
+    #cursor.sort("timestamp")
+    #newest=cursor[0]['timestamp']
+    stations = [x for x in db.stationinfo.find({},{'_id':0})]
+    return json.dumps({'stations':stations})
 
 
 x = popen2.popen2("ssh -N -L 4321:localhost:27017 mongo.zamansky.net")
