@@ -59,9 +59,12 @@ StationsModel = Backbone.Model.extend({
 
 
 makeGraph = function(stats) {
-var margin = {top: 30, right: 20, bottom: 30, left: 50},
+
+
+var margin = {top: 30, right: 40, bottom: 150, left: 50},
     width = 1000 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
+    height = 350 - margin.top - margin.bottom;
+    //height = 270 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%d-%b-%y").parse;
 
@@ -103,7 +106,13 @@ var svg = d3.select('#graph')
     svg.append("g")         // Add the X Axis
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis).selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", function(d) {
+                return "rotate(-65)" 
+                });
 
     svg.append("g")         // Add the Y Axis
         .attr("class", "y axis")

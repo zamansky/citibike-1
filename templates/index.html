@@ -9,7 +9,7 @@
 
 <style type="text/css">
    html { height: 100% }
-   #stationmap { height: 400px }
+   #stationmap { height: 400px; }
 path { 
     stroke: steelblue;
     stroke-width: 2;
@@ -26,7 +26,18 @@ path {
 
 }
 
+.pure-g {padding:5px;}
+
+#menu {
+  position: fixed;
+  right: 0;
+  top: 5%;
+   margin-top: -2.5em;
+   margin-bottom: -2.5em;
+}
+
 </style>
+
 
 </head>
 <body>
@@ -37,15 +48,21 @@ path {
 <div> Diff (last 5 minutes): <%= diff %> </div>
 </script>
 
-<script type="text/teplate" id="stationlist_template">
-<select>
-<% _.each(stations, function(name) { %> <option value="<%=name%>"><%= name %></option> <% }); %>";
-</select>
-</script>
 
 
-<h1>CitiBikes</h1>
-<div class="purge-g">
+
+<div id="menu" class="pure-menu pure-menu-open pure-menu-horizontal">
+    <a href="#" class="pure-menu-heading">Citibike Stats</a>
+
+    <ul>
+        <li class="pure-menu-selected"><a href="#stationmap">Home</a></li>
+        <li><a href="#what">What</a></li>
+        <li><a href="#why">Why</a></li>
+        <li><a href="#who">Who</a></li>
+    </ul>
+</div>
+
+<div  class="pure-g">
   <div class="pure-u-2-3">
     <div id="stationmap" >Stationmap goes here</div>
   </div>
@@ -54,9 +71,42 @@ path {
   </div>
 </div>
 
-<div class="purge-g">
+<div class="pure-g">
   <div class="pure-u-2-3">
     <div id="graph">graph goes here</div>
   </div>
 </div>
+
+<div class="purge-g">
+  <div id="what">
+    <h2>What</h2>
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    what
+  </div>
+</div>
+
+<div class="purge-g">
+  <div id="why">
+    <h2>Why</h2>
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+    wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
+  </div>
+</div>
+
 </body>
