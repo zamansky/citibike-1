@@ -8,7 +8,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script><script type="text/javascript" src="/static/main.js"></script>
 
 <style type="text/css">
-   html { height: 100% }
+   html { height: 100% margin-bottom:20pt; margin-top:40pt;}
    #stationmap { height: 400px; }
 path { 
     stroke: steelblue;
@@ -27,13 +27,13 @@ path {
 }
 
 .pure-g {padding:5px;}
+.pure-u-2-3 {padding:5px;}
 
 #menu {
   position: fixed;
   right: 0;
   top: 5%;
    margin-top: -2.5em;
-   margin-bottom: -2.5em;
 }
 
 </style>
@@ -52,7 +52,7 @@ path {
 
 
 <div id="menu" class="pure-menu pure-menu-open pure-menu-horizontal">
-    <a href="#" class="pure-menu-heading">Citibike Stats</a>
+    <a href="#" class="pure-menu-heading"><h1>Citibike Stats</h1></a>
 
     <ul>
         <li class="pure-menu-selected"><a href="#stationmap">Home</a></li>
@@ -79,6 +79,7 @@ path {
 
 <div class="purge-g">
   <div id="what">
+  <div class="pure-u-2-3">
     <h2>What</h2>
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
@@ -89,11 +90,13 @@ path {
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
     what
+    </div>
   </div>
 </div>
 
 <div class="purge-g">
   <div id="why">
+  <div class="pure-u-2-3">
     <h2>Why</h2>
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
@@ -108,5 +111,20 @@ path {
     wdskl  jdlkjf lkdsjf ldsjfdsl flkjfds hat
   </div>
 </div>
+</div>
+
+<div class="purge-g">
+  <div id="who">
+    <div class="purge-u-2-3">
+      <hr>
+      This page is brought to you by 
+      <a href="mailto:zamansky@cstuy.org">Mike Zamansky</a>
+      <p>
+      You can find my rants about teaching, computer science and more at <a href="http://cestlaz.github.io">cestlaz.github.io</a>
+      
+    </div>
+  </div>
+</div>
+
 
 </body>
