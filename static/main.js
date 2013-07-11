@@ -1,66 +1,12 @@
+/*--------------------Utility Functions --------------------*/
 
-StationsView = Backbone.View.extend({
-    el:'#stationmap',
-    doChangeStation:function(e) {
-	//var newStation = e.target.value;
-	var newStation = e;
-	var m = new StationModel(newStation);
-	var mv = new StationGraphView({model:m});
-	m.set('view',mv);
-    },
+function toTop() {
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
 
-    render: function() {
-	var myLatlng = new google.maps.LatLng(40.748389,-73.999271);
-	var mapOptions = {
-	    zoom: 14,
-	    center: myLatlng,
-	    mapTypeId: google.maps.MapTypeId.ROADMAP
-	};
-
-	this.map = new google.maps.Map(document.getElementById('stationmap'), mapOptions);
-	var that=this;
-	this.model.get('stations').forEach(function (d) {
-	    var ll = new google.maps.LatLng(parseFloat(d['latitude']),
-					    parseFloat(d['longitude']));
-	    var marker = new google.maps.Marker({
-		position: ll,
-		map:that.map,
-		title: d['stationName']
-	    });
-	    google.maps.event.addListener(marker, 'click', function(e) {
-		var newStation = d['stationName'];
-		var m = new StationModel(newStation);
-		var mv = new StationGraphView({model:m});
-		m.set('view',mv);
-		var sv = new StationStatModelView({model:m});
-	    });
-
-	});
-
-	//console.log(map);
-	//var subs={stations:this.model.get('stations')};
-	//var t = _.template($("#stationlist_template").html(),subs);
-	//
-	//$("#stationamp").replaceWith(this.el);
-	return this;
-    }
-});
-
-StationsModel = Backbone.Model.extend({
-    url:'/getStations',
-    initialize:function() {
-	var that=this;
-	this.fetch({success:function(data) {
-	    that.get('view').render();
-	    }});
-    }
-
-})
 
 
 makeGraph = function(stats) {
-
-
 var margin = {top: 30, right: 40, bottom: 150, left: 50},
     width = 1000 - margin.left - margin.right,
     height = 350 - margin.top - margin.bottom;
@@ -122,6 +68,75 @@ return svg;
 }
 
 
+ /*-------------------- --------------------*/
+
+
+
+
+StationsView = Backbone.View.extend({
+    el:'#stationmap',
+    doChangeStation:function(e) {
+	//var newStation = e.target.value;
+	var newStation = e;
+	var m = new StationModel(newStation);
+	var mv = new StationGraphView({model:m});
+	m.set('view',mv);
+    },
+
+    render: function() {
+	var myLatlng = new google.maps.LatLng(40.748389,-73.999271);
+	var mapOptions = {
+	    zoom: 14,
+	    center: myLatlng,
+	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	};
+
+	this.map = new google.maps.Map(document.getElementById('stationmap'), mapOptions);
+	var that=this;
+	this.model.get('stations').forEach(function (d) {
+	    var ll = new google.maps.LatLng(parseFloat(d['latitude']),
+					    parseFloat(d['longitude']));
+	    var marker = new google.maps.Marker({
+		position: ll,
+		map:that.map,
+		title: d['stationName']
+	    });
+	    google.maps.event.addListener(marker, 'click', function(e) {
+		var newStation = d['stationName'];
+		var m = new StationModel(newStation);
+		var mv = new StationGraphView({model:m});
+		m.set('view',mv);
+		var sv = new StationStatModelView({model:m});
+	    });
+
+	});
+
+	//console.log(map);
+	//var subs={stations:this.model.get('stations')};
+	//var t = _.template($("#stationlist_template").html(),subs);
+	//
+	//$("#stationamp").replaceWith(this.el);
+	return this;
+    }
+});
+
+
+
+StationsModel = Backbone.Model.extend({
+    url:'/getStations',
+    initialize:function() {
+	var that=this;
+	this.fetch({success:function(data) {
+	    that.get('view').render();
+	    }});
+    }
+
+})
+
+
+ /*-------------------- --------------------*/
+
+
 
 StationGraphView = Backbone.View.extend({
     el:"#graph",
@@ -139,6 +154,7 @@ StationGraphView = Backbone.View.extend({
 });
 
 
+ /*-------------------- --------------------*/
 
 StationStatModelView = Backbone.View.extend({
     el:"#stationstats",
@@ -173,9 +189,9 @@ StationModel = Backbone.Model.extend({
     }
 });
 
-function toTop() {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
-}
+
+
+/*-------------------- Bootstrap / Init code  --------------------*/
 
 var d,v;
 var stations,sv;
