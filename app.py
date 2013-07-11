@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 from flask import Flask, request, render_template, url_for, redirect
 import sys
@@ -13,16 +14,25 @@ app.secret_key="testkey"
 def index():
     return render_template("index.html")
 
-@app.route("/getDateRange")
-def getDateRange():
-    cursor = collection.find({'stationName':'W 26 St & 8 Ave'})
-    cursor.sort("timestamp")
-    oldest=cursor[0]['timestamp']
-    cursor.sort("timestamp",-1)
-    newest=cursor[0]['timestamp']
-    range={'min':oldest,'max':newest}
-    return json.dumps(range)
 
+# Get station info based on a stat (min or max diff
+@app.route("/getStat/")
+@app.route("/getStat/<type>")
+def getStat(type="diffmin"):
+    # first get the latest timestamp
+    cursor = collection.find({},{"_id":0,'timestamp':1})
+    cursor.sort("timestamp",-1)
+    t = cursor[0]['timestamp']
+    cursor = collection.find({'timestamp':t},{'_id':0,'diff':1})
+    if type=="diffmin":
+        result = cursor[0]
+    else:
+        result = cursor[cursor.count()-1]
+    return json.dumps(result)
+
+
+
+#get a single station by name
 @app.route("/getStation/")
 @app.route("/getStation/<station>")
 def getStation(station=None):
@@ -41,17 +51,7 @@ def getStation(station=None):
     return json.dumps(data)
 
 
-@app.route("/getstationdiff/<station>/<time>")
-def getstationdiff(station=None,time=None):
-    span=time-(1000*60*30)
-    cursor=collection.find({'stationName':station,
-                            'timestamp':{'$gt':span,'$lt':time+1}},{'_id':0})
-    cursor.sort("timestamp")
-    l= [x for x in cursor]
-    dif = l[0]['availableBikes']-l[-1]['availableBikes']
-    return json.dumps(dif)
-
-
+# Get all of the stations
 @app.route("/getStations")
 def getStations():
     #stations =  db.command({'distinct':'stations','key':'stationName'})[n
