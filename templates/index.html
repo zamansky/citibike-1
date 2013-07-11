@@ -28,12 +28,13 @@ path {
 
 .pure-g {padding:5px;}
 .pure-u-2-3 {padding:5px;}
+.pure-u-1-6 {padding:5px;}
 
 #menu {
   position: fixed;
   right: 0;
-  top: 5%;
-   margin-top: -2.5em;
+  top: 3%;
+  margin-top: -2.5em;
 }
 
 </style>
@@ -41,6 +42,7 @@ path {
 
 </head>
 <body>
+<a name=top></a>
 <script type="text/template" id="stationstat_template">
 <div> <%= stationName %> </div>
 <div> Bikes: <%= availableBikes %> </div>
@@ -55,7 +57,7 @@ path {
     <a href="#" class="pure-menu-heading"><h1>Citibike Stats</h1></a>
 
     <ul>
-        <li class="pure-menu-selected"><a href="#stationmap">Home</a></li>
+        <li class="pure-menu-selected"><a onClick="toTop()" href="#">Home</a></li>
         <li><a href="#what">What</a></li>
         <li><a href="#why">Why</a></li>
         <li><a href="#who">Who</a></li>
@@ -107,8 +109,8 @@ I might add more graph options as more data is collected
 <div class="purge-g">
   <div id="who">
     <div class="purge-u-2-3">
-    <h2>Who</h2>
       <hr>
+      <h2>Who</h2>
       This page is brought to you by 
       <a href="mailto:zamansky@cstuy.org">Mike Zamansky</a>
       <p>

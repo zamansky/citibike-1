@@ -10,7 +10,7 @@ StationsView = Backbone.View.extend({
     },
 
     render: function() {
-	var myLatlng = new google.maps.LatLng(40.704066,-73.992727);
+	var myLatlng = new google.maps.LatLng(40.748389,-73.999271);
 	var mapOptions = {
 	    zoom: 14,
 	    center: myLatlng,
@@ -173,6 +173,9 @@ StationModel = Backbone.Model.extend({
     }
 });
 
+function toTop() {
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
 
 var d,v;
 var stations,sv;
@@ -180,4 +183,10 @@ $(document).ready(function(){
     stations=new StationsModel();
     sv = new StationsView({model:stations});
     stations.set('view',sv);
+    var newStation = "W 26 St & 8 Ave";
+    var m = new StationModel(newStation);
+    var mv = new StationGraphView({model:m});
+    m.set('view',mv);
+    var sv = new StationStatModelView({model:m});
+    totop();
 });

@@ -33,7 +33,7 @@ def getStation(station=None):
     cursor =collection.find({'stationName':station},{'availableBikes':1,'timestamp':1,'_id':0})
     cursor.sort("timestamp")
     stats=[x for x in cursor]
-    cursor =collection.find({'stationName':station},{'_id':0})
+    cursor =collection.find({'stationName':station,'timestamp':stats[-1]['timestamp']},{'_id':0})
     info=cursor[0]
     info['min']=stats[0]['timestamp']
     info['max']=stats[-1]['timestamp']
