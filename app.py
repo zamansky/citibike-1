@@ -24,6 +24,7 @@ def getStat(type="diffmin"):
     cursor.sort("timestamp",-1)
     t = cursor[0]['timestamp']
     cursor = collection.find({'timestamp':t},{'_id':0,'diff':1})
+    cursor.sort('diff')
     if type=="diffmin":
         result = cursor[0]
     else:
