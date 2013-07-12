@@ -6,7 +6,7 @@ function toTop() {
 
 
 
-var makeStationGraphView(station) {
+var makeStationGraphView = function(station) {
     var m = new StationModel(station);
     var mv = new StationGraphView({model:m});
     m.set('view',mv);
