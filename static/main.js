@@ -6,6 +6,13 @@ function toTop() {
 
 
 
+var makeStationGraphView(station) {
+    var m = new StationModel(station);
+    var mv = new StationGraphView({model:m});
+    m.set('view',mv);
+    var sv = new StationStatModelView({model:m});
+}
+
 makeGraph = function(stats) {
 var margin = {top: 30, right: 40, bottom: 150, left: 50},
     width = 1000 - margin.left - margin.right,
@@ -68,8 +75,9 @@ return svg;
 }
 
 
- /*-------------------- --------------------*/
-
+/*-------------------- All Stations --------------------*/
+/*
+*/
 
 
 
@@ -78,9 +86,12 @@ StationsView = Backbone.View.extend({
     doChangeStation:function(e) {
 	//var newStation = e.target.value;
 	var newStation = e;
+	makeStationGraphView(newStation);
+	/*
 	var m = new StationModel(newStation);
 	var mv = new StationGraphView({model:m});
 	m.set('view',mv);
+	 */
     },
 
     render: function() {
@@ -134,9 +145,12 @@ StationsModel = Backbone.Model.extend({
 })
 
 
- /*-------------------- --------------------*/
 
 
+ /*-------------------- StationModel --------------------*/
+/*
+ A single station
+*/
 
 StationGraphView = Backbone.View.extend({
     el:"#graph",
@@ -153,8 +167,6 @@ StationGraphView = Backbone.View.extend({
     
 });
 
-
- /*-------------------- --------------------*/
 
 StationStatModelView = Backbone.View.extend({
     el:"#stationstats",
@@ -200,9 +212,6 @@ $(document).ready(function(){
     sv = new StationsView({model:stations});
     stations.set('view',sv);
     var newStation = "W 26 St & 8 Ave";
-    var m = new StationModel(newStation);
-    var mv = new StationGraphView({model:m});
-    m.set('view',mv);
-    var sv = new StationStatModelView({model:m});
+    makeStationGraphView(newStation);
     totop();
 });
