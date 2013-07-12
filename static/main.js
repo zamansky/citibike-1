@@ -121,12 +121,6 @@ StationsView = Backbone.View.extend({
 	    });
 
 	});
-
-	//console.log(map);
-	//var subs={stations:this.model.get('stations')};
-	//var t = _.template($("#stationlist_template").html(),subs);
-	//
-	//$("#stationamp").replaceWith(this.el);
 	return this;
     }
 });
@@ -145,7 +139,51 @@ StationsModel = Backbone.Model.extend({
 })
 
 
+ /*-------------------- StatModel --------------------*/
 
+var StatMinView = Backbone.View.extend({
+    el:"#statmin",
+    initialize: function(d) {
+	_.bindAll(this,"render");
+	this.model.bind('change',this.render);
+    },
+    render:function() {
+	var m = this.model.attributes;
+	var t = _.template($("#statmin_template").html(),m);
+	this.$el.html(t);
+	return this;
+    }
+});
+
+
+var StatMaxView = Backbone.View.extend({
+    el:"#statmax",
+    initialize: function(d) {
+	_.bindAll(this,"render");
+	this.model.bind('change',this.render);
+    },
+    render:function() {
+	var m = this.model.attributes;
+	var t = _.template($("#statmax_template").html(),m);
+	this.$el.html(t);
+	return this;
+    }
+});
+
+var StatModel = Backbone.Model.extend({
+    url:function () {
+	return "/getStat/"+this.get('stat');
+    },
+    initialize: function(data) {
+	if (data===undefined) {
+	    data = 'diffmin';
+	}
+	var that=this;
+	this.set({'stat':data});
+	this.fetch();
+   
+    }
+});
 
  /*-------------------- StationModel --------------------*/
 /*
@@ -177,7 +215,6 @@ StationStatModelView = Backbone.View.extend({
     render:function() {
 	var m = this.model;
 	var s=m.get('info');
-	console.log(s);
 	var t = _.template($("#stationstat_template").html(),s);
 	this.$el.html(t);
 	return this;
@@ -207,11 +244,21 @@ StationModel = Backbone.Model.extend({
 
 var d,v;
 var stations,sv;
+var statmax,statmin;
+var statmaxv, statminv;
+
 $(document).ready(function(){
     stations=new StationsModel();
     sv = new StationsView({model:stations});
     stations.set('view',sv);
     var newStation = "W 26 St & 8 Ave";
     makeStationGraphView(newStation);
-    totop();
+    statmax = new StatModel('diffmax');
+    statmaxv = new StatMaxView({model:statmax});
+    statmin = new StatModel('diffmin');
+    statminv = new StatMinView({model:statmin});
+    window.setInterval(function() {statmax.fetch();}, 1000*60);
+    window.setInterval(function() {statmin.fetch();}, 1000*60);
+
+    toTop();
 });
