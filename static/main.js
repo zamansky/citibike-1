@@ -25,7 +25,7 @@ var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").tickFormat(d3.time.format("%a %H:%M")).ticks(d3.time.hours,2);
+    .orient("bottom").tickFormat(d3.time.format("%a %H:%M")).ticks(d3.time.hours,4);
 
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(5);
