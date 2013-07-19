@@ -8,7 +8,7 @@ function toTop() {
 
 var makeStationGraphView = function(station) {
     var m = new StationModel(station);
-    var mv = new StationGraphView({model:m});
+    var mv = new StationWeekGraphView({model:m});
     m.set('view',mv);
     var sv = new StationStatModelView({model:m});
 }
@@ -195,6 +195,28 @@ StationGraphView = Backbone.View.extend({
     render: function() {
 	//this.$el.html(this.model.get('stationName'));
 	var stats = this.model.get('stats');
+	this.$el.empty();
+	var g = makeGraph(stats);
+	d3.select('#graph').append(g);
+	//this.$el.html(d3.select('svg'));
+	
+	return this;
+    }
+    
+});
+
+
+StationWeekGraphView = Backbone.View.extend({
+    el:"#graph",
+    render: function() {
+	//this.$el.html(this.model.get('stationName'));
+	var stats = this.model.get('stats');
+	var now = parseInt(stats[stats.length-1].timestamp);
+	var weekago = now - 60*60*24*7;
+	stats = _.filter(stats,function (x) {
+	    //console.log(x.timestamp,weekago);
+	    return parseInt(x.timestamp) >= weekago;
+	    });
 	this.$el.empty();
 	var g = makeGraph(stats);
 	d3.select('#graph').append(g);
